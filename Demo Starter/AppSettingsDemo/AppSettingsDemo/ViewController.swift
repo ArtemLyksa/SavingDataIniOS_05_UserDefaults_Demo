@@ -25,7 +25,16 @@ class ViewController: UIViewController {
   }
 
   @IBAction func saveData(sender: AnyObject) {
-   
+   let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(firstName.text, forKey: "FirstName")
+        userDefaults.setObject(lastName.text, forKey: "LastName")
+        userDefaults.setInteger(mood.selectedSegmentIndex, forKey: "Mood")
+    
+    if let  pickedImage = imageView.image {
+        let picture = UIImagePNGRepresentation(pickedImage)
+        userDefaults.setObject(picture, forKey: "Picture")
+        pickImageButton.hidden = true
+    }
   }
   
   override func viewDidLoad() {
@@ -33,6 +42,15 @@ class ViewController: UIViewController {
     
     firstName.delegate = self
     lastName.delegate = self
+    
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    firstName.text = userDefaults.valueForKey("FirstName") as? String
+    lastName.text = userDefaults.valueForKey("LastName") as? String
+    mood.selectedSegmentIndex = userDefaults.integerForKey("Mood")
+    
+    if let picture = userDefaults.objectForKey("Picture") as? NSData {
+    imageView.image = UIImage(data: picture)
+    }
     
   }
   
